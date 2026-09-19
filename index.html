@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday 💕</title>
+<style>
+  :root{
+    --pink:#ff6b9d;
+    --purple:#a855f7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: linear-gradient(135deg, rgba(253, 247, 92, 0.8), rgba(243, 232, 255, 0.8)), url('photo5a.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #444;
+  }
+
+  .finale{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:20px;
+  }
+  .frame{
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    margin:0 auto 24px;
+    cursor:pointer;
+    overflow:hidden;
+    border:6px solid white;
+    box-shadow:0 10px 30px rgba(18, 18, 18, 0.3);
+    transition:transform 0.3s ease;
+  }
+  .frame:hover{ transform:scale(1.05); }
+  .frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .hint{
+    color:var(--black);
+    font-size:14px;
+    margin-bottom:20px;
+    animation:pulse 1.5s infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+  .message{
+    display:none;
+    max-width:480px;
+    margin:0 auto;
+    background:white;
+    padding:30px 26px;
+    border-radius:20px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.1);
+    animation:fadeUp 0.6s ease;
+  }
+  .message.show{ display:block; }
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .message h1{ color:var(--pink); font-size:28px; margin:0 0 16px; }
+  .message p{ color:#555; font-size:16px; line-height:1.7; margin:0; white-space:pre-line; }
+  .continueHint{
+    margin-top:30px;
+    font-size:14px;
+    color:var(--black);
+    animation:bounce 1.6s infinite;
+    display:none;
+  }
+  .continueHint.show{ display:block; }
+  @keyframes bounce{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(10px); }
+  }
+
+  .heart{
+    position:fixed;
+    font-size:20px;
+    animation:float 4s linear forwards;
+    pointer-events:none;
+  }
+  @keyframes float{
+    from{ transform:translateY(0) rotate(0deg); opacity:1; }
+    to{ transform:translateY(-100vh) rotate(360deg); opacity:0; }
+  }
+  .cover{
+    min-height:60vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:20px;
+  }
+  .cover h1{
+    font-size:36px;
+    color:var(--pink);
+    margin-bottom:10px;
+  }
+  .cover p{
+    color:#777;
+    font-size:16px;
+  }
+  .timeline{
+    max-width:1000px;
+    margin:0 auto;
+    padding:40px 20px 100px;
+  }
+  .chapter{
+    display:flex;
+    align-items:center;
+    gap:40px;
+    margin-bottom:90px;
+    opacity:0;
+    transform:translateY(40px);
+    transition:opacity 0.8s ease, transform 0.8s ease;
+  }
+  .chapter.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .chapter.reverse{
+    flex-direction:row-reverse;
+  }
+
+  .photo-slot{
+    flex:0 0 280px;
+    height:280px;
+    border-radius:20px;
+    background:white;
+    border:3px dashed #d9b3ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(168,85,247,0.15);
+    position:relative;
+  }
+  .photo-slot img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    position:absolute;
+    top:0;
+    left:0;
+    opacity:0;
+    transition:opacity 1s ease;
+  }
+  .photo-slot img.active{ opacity:1; }
+  .photo-slot .placeholder-text{
+    color:#c9a8ea;
+    font-size:14px;
+    text-align:center;
+    padding:20px;
+    position:relative;
+    z-index:1;
+  }
+
+  .caption-box{
+    flex:1;
+    background:white;
+    border-radius:16px;
+    padding:24px 28px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.06);
+  }
+  .caption-box .chapter-label{
+    color:var(--pink);
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    font-weight:bold;
+    margin-bottom:8px;
+  }
+  .caption-box h2{
+    margin:0 0 10px;
+    font-size:22px;
+    color:#333;
+  }
+  .caption-box p{
+    font-size:15px;
+    line-height:1.7;
+    color:#666;
+    white-space:pre-line;
+  }
+
+  @media (max-width:700px){
+    .chapter, .chapter.reverse{
+      flex-direction:column;
+      gap:20px;
+    }
+    .photo-slot{ flex:0 0 auto; width:100%; max-width:280px; }
+  }
+</style>
+</head>
+<body>
+  <audio id="bgMusic" loop>
+  <source src="hbbg.mp3" type="audio/mp3">
+</audio>
+<div class="finale">
+  <div class="frame" id="photoFrame">
+    <img src="melly-photo.jpeg" alt="Melly photo">
+  </div>
+  <div class="hint" id="hint"><strong>Tap the photo</strong></div>
+
+  <div class="message" id="messageBox">
+    <h1>Happy Birthday, Mrs.Shelton 🎉</h1>
+    <p id="messageText">Happy Birthday, my <strong>Melly</strong> ❤️ You are the most <strong>beautiful answer to the prayers</strong> I once made to God. I’m so blessed to have you in my life, and I can’t wait to create a <strong>lifetime of beautiful memories</strong> with you.</p>
+  </div>
+
+  <div class="continueHint" id="continueHint"><strong>↓ scroll down for shellymelly story ↓</strong></div>
+</div>
+<div class="cover">
+  <h1>Our Story 💕</h1>
+  <p>Here's how we got here.</p>
+</div>
+<div class="timeline">
+
+  <div class="chapter">
+    <div class="photo-slot slideshow" data-chapter="1">
+      <img src="photo1a.jpeg" alt="How we met" class="active">
+      <img src="photo1b.jpeg" alt="How we met">
+      <img src="photo1c.jpeg" alt="How we met">
+      <img src="photo1d.jpeg" alt="How we met">
+    </div>
+    <div class="caption-box">
+      <div class="chapter-label">Chapter One</div>
+      <h2>How We Met</h2>
+      <p>It all started with a <strong>matrimonial ID</strong>. One day, my mom showed me a matrimonial profile that caught my attention. I never imagined that the girl in that picture would one day become such an <strong>important part of my life</strong>. We sent her a request, and they accepted it. At that time, I was the one handling the matrimonial profile, so I called her mom and introduced myself. I shared everything about me, my work, my family, and where I was in life. I was working in Coimbatore then, and during our conversation, she asked if my parents and I could meet her sometime while she was there in Coimbatore. I agreed, and that was the <strong>first time we met her mom and chithi</strong>. For me, it was a completely new experience. I had never met a girl's parents before for a marriage proposal, and there was something different about sitting in front of someone who was trying to understand whether I could become a part of their daughter's life. But somehow, I wasn't afraid. I spoke <strong>confidently and openly</strong>, and I told her about myself and how seriously I was looking at this proposal. That conversation meant something, and she accepted me. After that first meeting, there were several days of conversations and discussions with relatives and friends. Slowly, the proposal started moving forward. Then one day, we got the call. They wanted to visit our house in Tirunelveli. That day finally came, with relatives, family members, expectations, and excitement all around us. By <strong>God's grace</strong>, everything went beautifully, and on <strong>June 14, our flower ceremony happened</strong>. What started with a matrimonial profile had already begun turning into something much bigger, something I couldn't have planned myself, something <strong>God was quietly writing</strong>.</p>
+    </div>
+  </div>
+
+  <div class="chapter reverse">
+    <div class="photo-slot slideshow" data-chapter="2">
+      <img src="photo2a.jpeg" alt="Becoming friends" class="active">
+      <img src="photo2b.jpeg" alt="Becoming friends">
+      <img src="photo2c.jpeg" alt="Becoming friends">
+    </div>
+    <div class="caption-box">
+      <div class="chapter-label">Chapter Two</div>
+      <h2>Becoming Friends</h2>
+      <p>After our first meeting, we exchanged our numbers and followed each other on Instagram. Slowly, we started <strong>becoming friends</strong>. We started talking about many things and sharing more about our lives. We talked about cars, driving, trips, series, our likes and dislikes and many other small things. As we spent more time talking, we became <strong>more comfortable with each other</strong>. We started planning our future and talking about the life we wanted to build together. We wanted to create many beautiful memories, so we even created our own couple page, <strong>@thetwogetherdump</strong>, to keep all our lovely memories together. Everything was not always easy. We had our own struggles and difficult moments, but we always tried to <strong>stand together</strong> and understand each other. With every situation, we became closer and slowly realized <strong>how important we were to each other</strong>.</p>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <div class="photo-slot slideshow" data-chapter="3">
+      <img src="photo3a.jpeg" alt="Falling for her" class="active">
+      <img src="photo3b.jpeg" alt="Falling for her">
+    </div>
+    <div class="caption-box">
+      <div class="chapter-label">Chapter Three</div>
+      <h2>When I Knew</h2>
+      <p>As the days passed, we started to understand each other more. At one point, we both felt that <strong>we were meant for each other</strong>. From that day, we decided to <strong>pray together</strong> and accept each other as husband and wife in front of God. I always wanted to support her in every way I could, and she also changed many things in my life with her love and guidance. Every Sunday, we would <strong>pray together through a phone call</strong>. Even though we were not always together physically, our prayers kept us connected. Slowly, everything started going well between us and both our families. We became more confident about our future together and started <strong>preparing for our engagement</strong>.</p>
+    </div>
+  </div>
+
+  <div class="chapter reverse">
+    <div class="photo-slot slideshow" data-chapter="4">
+      <img src="photo4a.jpeg" alt="God's plan" class="active">
+      <img src="photo4b.jpeg" alt="God's plan">
+      <img src="photo4c.jpeg" alt="God's plan">
+      <img src="photo4d.jpeg" alt="God's plan">
+      <img src="photo4e.jpeg" alt="God's plan">
+      <img src="photo4f.jpeg" alt="God's plan">
+      <img src="photo4g.jpeg" alt="God's plan">
+      <img src="photo4h.jpeg" alt="God's plan">
+      <img src="photo4i.jpeg" alt="God's plan">
+    </div>
+    <div class="caption-box">
+      <div class="chapter-label">Chapter Four</div>
+      <h2>How God Planned Everything</h2>
+      <p>I have never seen a celebration like the one our families gave us. I was always someone who never really celebrated my birthday properly. There was never much excitement, no big birthday celebrations and no special moments that made me feel like life was something to celebrate. Many times, I would <strong>stand alone on the terrace</strong>, look at the moon and ask God, <strong>“When will I have the life I dream about?”</strong> I had so many dreams in my heart about love, family, happiness and having someone to share my life with. Even my friends sometimes told me that I was dreaming too much and that the life I imagined was not even possible. But I kept believing that <strong>one day God would answer that prayer</strong>. And then Melly came into my life. During the engagement preparations, I slowly realized that <strong>God had given me much more than what I had asked for</strong>. I was not just getting a wife, I was getting a <strong>beautiful family and a whole new life</strong>. Mummy, Sherle akka, Madhu Chithi, Sharon and Chitapa all accepted me and treated me like one of their own. There is one moment I will never forget. <strong>Mummy was the first person to hug me like that</strong>. In that moment, I felt something I had never felt before. She truly saw me as her own son. That hug touched me so deeply that <strong>I cried inside with joy and happiness</strong>. It was such a simple moment, but for me, it meant everything. Chithi would call me every day to check on me and send me lovely messages. Mummy prepared the royal lunch for me and my family. Sherle akka and Sharon gave me a Raksha Bandan gift and showed me so much love and support. These may look like small things to others, but for someone who spent so many days wishing for a life filled with love and family, these moments meant everything to me. Then came <strong>September 11, our engagement day</strong>. It was one of the happiest days of my life, and honestly, it felt like one of those dreams I had once asked God for while standing alone under the moon. I always had a special wish for <strong>11:11</strong>, so I asked Mummy if we could fix our marriage date on <strong>November 11</strong>. I never thought that this small wish would actually come true. But by God's grace, November 11 became our marriage date. When I look back now, I feel that <strong>God was listening to every prayer</strong>, even the ones I thought nobody heard. The life my friends thought was impossible became my reality. The girl I saw in a matrimonial profile became the girl I fell in love with, and the life I once only dreamed about became the life I am living today. God did not just give me Melly. He gave me the <strong>love, family, happiness and memories</strong> that I had been praying for all those years. This is more than the story of how I met a girl. This is the story of <strong>how God answered a boy</strong> who once stood alone on a terrace, looked at the moon and asked for the life he dreamed of.</p>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <div class="photo-slot slideshow" data-chapter="5">
+      <img src="photo5a.jpeg" alt="Us today" class="active">
+    </div>
+    <div class="caption-box">
+      <div class="chapter-label">Chapter Five</div>
+      <h2>Us, Today</h2>
+      <p>When I look back at everything, I still find it hard to believe how it all started. A matrimonial profile, a cute picture, a request, an acceptance, one phone call to her mummy, and one unexpected meeting in Coimbatore. And today, she's Melly — <strong>my person, my wife, my family, and my home</strong>. Our story isn't about everything being perfect; it's about <strong>how we stood together</strong> when things weren't easy. It's about two people who slowly became friends, then partners, then family. It's about prayers over phone calls every Sunday, families coming together, the little messages from Chithi, Mummy's food, Sherle akka and Sharon's love, and Madhuchithi and Chitapa accepting me into their family. It's about all those little moments that turned a proposal into a lifetime. Somewhere between all those moments, I realized that I didn't just find a girl to marry; I found <strong>the girl I want to make memories with for the rest of my life</strong>. We started our story with a matrimonial profile, then we became friends, then we chose each other, then we prayed together, then our families became one, and now we're waiting for the next chapter — <strong>November 11, the day our forever begins</strong>. This is our story. This is how I met my girl. This is how God brought her into my life. This is our <strong>Shelly–Melly story</strong>. ❤️</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const chapters = document.querySelectorAll('.chapter');
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+},{ threshold:0.2 });
+chapters.forEach(ch => observer.observe(ch));
+
+// crossfade slideshow for each chapter photo box
+document.querySelectorAll('.photo-slot.slideshow').forEach(slot => {
+  const imgs = slot.querySelectorAll('img');
+  if(imgs.length < 2) return;
+  let current = 0;
+  setInterval(() => {
+    imgs[current].classList.remove('active');
+    current = (current + 1) % imgs.length;
+    imgs[current].classList.add('active');
+  }, 3000);
+});
+
+const frame = document.getElementById('photoFrame');
+const messageBox = document.getElementById('messageBox');
+const hint = document.getElementById('hint');
+const continueHint = document.getElementById('continueHint');
+const bgMusic = document.getElementById('bgMusic');
+
+frame.addEventListener('click', () => {
+  messageBox.classList.add('show');
+  hint.style.display = 'none';
+  continueHint.classList.add('show');
+  launchHearts();
+  bgMusic.play().catch(error => {
+    console.log("Audio play blocked or failed:", error);
+  });
+});
+
+
+function launchHearts(){
+  const emojis = ['💖','💕','🎂','🎉','✨'];
+  for(let i=0;i<30;i++){
+    setTimeout(()=>{
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      heart.style.left = Math.random()*100 + 'vw';
+      heart.style.bottom = '-30px';
+      heart.style.fontSize = (16 + Math.random()*20) + 'px';
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(), 4000);
+    }, i*80);
+  }
+}
+</script>
+
+</body>
+</html>
